@@ -1,40 +1,87 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:tudee_app/screens/add_task_screen.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   final String name;
 
-  HomePage({required this.name});
+  const HomePage({
+    super.key,
+    required this.name,
+  });
 
   @override
-  Widget build(BuildContext context) {
-    var box = Hive.box('tasksBox');
+  State<HomePage> createState() => _HomePageState();
+}
 
-    List tasks = box.get(
-      'tasks_$name',
+class _HomePageState extends State<HomePage> {
+  List tasks = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTasks();
+  }
+
+  void _loadTasks() {
+    final box = Hive.box('tasksbox');
+
+    final savedTasks = box.get(
+      'tasks_${widget.name}',
       defaultValue: [],
     );
 
+    setState(() {
+      tasks = List.from(savedTasks);
+    });
+  }
+
+  Future<void> _openAddTaskPage() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddTaskPage(
+          name: widget.name,
+        ),
+      ),
+    );
+
+    if (result == true) {
+      _loadTasks();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffffe8e8),
+      backgroundColor: const Color(0xffffe8e8),
 
       appBar: AppBar(
-        backgroundColor: Color(0xff48b3e5),
-        title: Text('Tudee'),
+        backgroundColor: const Color(0xff48b3e5),
+        elevation: 0,
+
+        title: const Text(
+          'Tudee',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
 
       body: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
 
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
-
             // Welcome
             Container(
               width: double.infinity,
-              padding: EdgeInsets.all(10),
+
+              padding: const EdgeInsets.all(10),
 
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -45,46 +92,54 @@ class HomePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
 
                 children: [
-
                   Text(
-                    'Welcome $name',
-                    style: TextStyle(fontSize: 13),
+                    'Welcome ${widget.name}',
+                    style: const TextStyle(
+                      fontSize: 13,
+                    ),
                   ),
 
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
 
                   Row(
                     children: [
-
                       // Done
                       Expanded(
                         child: Container(
                           height: 65,
-                          color: Color(0xff70c49b),
 
-                          child: Center(
+                          color: const Color(0xff70c49b),
+
+                          child: const Center(
                             child: Text(
                               'Done\n0',
                               textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.white),
+
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
                       ),
 
-                      SizedBox(width: 6),
+                      const SizedBox(width: 6),
 
                       // To-do
                       Expanded(
                         child: Container(
                           height: 65,
-                          color: Color(0xff9180ed),
+
+                          color: const Color(0xff9180ed),
 
                           child: Center(
                             child: Text(
                               'To-do\n${tasks.length}',
                               textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.white),
+
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
@@ -95,40 +150,42 @@ class HomePage extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
 
             // Tasks
             if (tasks.isEmpty)
-
               Container(
                 width: double.infinity,
                 height: 94,
 
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
 
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                 ),
 
-                child: Text(
+                child: const Text(
                   'No tasks for today!\n'
                   'Tap the + button to add your first one.',
-                  style: TextStyle(fontSize: 11),
+
+                  style: TextStyle(
+                    fontSize: 11,
+                  ),
                 ),
               )
-
             else
-
               Expanded(
                 child: ListView.builder(
                   itemCount: tasks.length,
 
                   itemBuilder: (context, index) {
-
                     return Container(
-                      margin: EdgeInsets.only(bottom: 10),
-                      padding: EdgeInsets.all(12),
+                      margin: const EdgeInsets.only(
+                        bottom: 10,
+                      ),
+
+                      padding: const EdgeInsets.all(12),
 
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -146,15 +203,16 @@ class HomePage extends StatelessWidget {
         ),
       ),
 
-      // زر الإضافة
+      // Floating Button
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xff3eb1e4),
+        backgroundColor: const Color(0xff3eb1e4),
 
-        onPressed: () {
-          // سنضيف Task هنا لاحقًا
-        },
+        onPressed: _openAddTaskPage,
 
-        child: Icon(Icons.add),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
     );
   }
