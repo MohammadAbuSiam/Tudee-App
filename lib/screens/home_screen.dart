@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tudee_app/screens/add_task_screen.dart';
+import 'package:tudee_app/screens/edit_task_screen.dart';
 
 class HomePage extends StatefulWidget {
   final String name;
@@ -51,8 +52,30 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> _openEditTaskPage(int index) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditTaskPage(
+          name: widget.name,
+          taskIndex: index,
+          task: tasks[index],
+        ),
+      ),
+    );
+
+    if (result == true) {
+      _loadTasks();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final doneCount =
+        tasks.where((task) => task['isDone'] == true).length;
+
+    final todoCount = tasks.length - doneCount;
+
     return Scaffold(
       backgroundColor: const Color(0xffffe8e8),
 
@@ -110,12 +133,12 @@ class _HomePageState extends State<HomePage> {
 
                           color: const Color(0xff70c49b),
 
-                          child: const Center(
+                          child: Center(
                             child: Text(
-                              'Done\n0',
+                              'Done\n$doneCount',
                               textAlign: TextAlign.center,
 
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white,
                               ),
                             ),
@@ -134,7 +157,7 @@ class _HomePageState extends State<HomePage> {
 
                           child: Center(
                             child: Text(
-                              'To-do\n${tasks.length}',
+                              'To-do\n$todoCount',
                               textAlign: TextAlign.center,
 
                               style: const TextStyle(
@@ -180,20 +203,26 @@ class _HomePageState extends State<HomePage> {
                   itemCount: tasks.length,
 
                   itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.only(
-                        bottom: 10,
-                      ),
+                    return GestureDetector(
+                      onTap: () {
+                        _openEditTaskPage(index);
+                      },
 
-                      padding: const EdgeInsets.all(12),
+                      child: Container(
+                        margin: const EdgeInsets.only(
+                          bottom: 10,
+                        ),
 
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                        padding: const EdgeInsets.all(12),
 
-                      child: Text(
-                        tasks[index]['title'],
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+
+                        child: Text(
+                          tasks[index]['title'],
+                        ),
                       ),
                     );
                   },
