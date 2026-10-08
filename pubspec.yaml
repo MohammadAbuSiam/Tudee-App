@@ -1,0 +1,27 @@
+name: tudee_app
+
+description: "A new Flutter project."
+
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.13.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  shared_preferences: ^2.5.6
+  google_fonts: ^9.0.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+
+  uses-material-design: true
