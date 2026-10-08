@@ -1,17 +1,45 @@
-# tudee_app
+# Tudee App
 
-A new Flutter project.
+A simple Flutter To-Do application built with Flutter and Hive.
+
+## Features
+
+- Add new tasks
+- Edit existing tasks
+- Change task status between To-do and Done
+- View the number of completed and pending tasks
+- Store tasks locally using Hive
+- Simple and clean user interface
+
+## Technologies
+
+- Flutter
+- Dart
+- Hive
+- Hive Flutter
+
+## Screens
+
+### Home Page
+
+The home page displays the user's tasks and shows the number of completed and pending tasks.
+
+### Add Task
+
+Users can add a new task and save it locally.
+
+### Edit Task
+
+Users can edit the task title and change its status between To-do and Done.
+
+## Data Storage
+
+The application uses Hive for local data storage.
+
+Tasks are stored locally, so they remain available when the application is reopened.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Clone the repository:
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+git clone https://github.com/MohammadAbuSiam/Tudee-App.git
